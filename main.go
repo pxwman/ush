@@ -46,6 +46,17 @@ func redisCmd(args ...string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	
+	// This unwraps the Upstash response
+	var upstashResp struct {
+		Result string `json:"result"`
+	}
+	json.Unmarshal(body, &upstashResp)
+	
+	if upstashResp.Result != "" {
+		return upstashResp.Result, nil
+	}
+
 	return string(body), nil
 }
 
